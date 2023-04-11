@@ -3,7 +3,7 @@ const path = require("path");
 const cors = require("cors");
 const { createPdf } = require("./createPdf");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 
@@ -16,9 +16,7 @@ app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodie
 app.use(express.static(__dirname));
 
 app.get("/", function (req, res) {
-  createPdf()
-    .then((response) => res.send(response))
-    .catch((err) => res.send(err));
+ return createPdf(res)
 });
 
 app.listen(PORT).on("listening", () => {
