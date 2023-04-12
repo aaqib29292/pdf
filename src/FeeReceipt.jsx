@@ -141,6 +141,73 @@ const LabelAndValue = ({ labelWidth, label, value }) => {
   );
 };
 
+const table = StyleSheet.create({
+  wrapper: {
+    display: 'table',
+    width: 'auto',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    borderColor: '#868992',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    background: '#F8F8F8',
+  },
+  tableHeader: {
+    backgroundColor: '#F2F4F8',
+  },
+  tableFooter: {
+    backgroundColor: '#F2F4F8',
+    fontWeight: 700,
+  },
+  tableCol: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderColor: '#868992',
+  },
+  tableCell: {
+    padding: '4.5px 8px',
+  },
+});
+
+const Table = ({ columns = [], dataSource = [], hasFooter = false }) => {
+  return (
+    <View style={table.wrapper}>
+      <View style={cx(table.tableRow, table.tableHeader)}>
+        {columns.map(({ width, key, title, ...prop } = {}) => {
+          return (
+            <View key={key} style={cx(table.tableCol, width ? { width: width } : { flex: 1 })}>
+              <Body bold={true} style={cx(table.tableCell, { ...prop })}>
+                {title}
+              </Body>
+            </View>
+          );
+        })}
+      </View>
+      {dataSource?.map((row, index) => {
+        return (
+          <View
+            key={index}
+            style={cx(table.tableRow, index + 1 === dataSource?.length && table.tableFooter)}
+          >
+            {columns.map(({ width, key, ...prop } = {}) => {
+              return (
+                <View key={key} style={cx(table.tableCol, width ? { width } : { flex: 1 })}>
+                  <Body style={cx(table.tableCell, { ...prop })}>{row[key]}</Body>
+                </View>
+              );
+            })}
+          </View>
+        );
+      })}
+    </View>
+  );
+};
+
 const s = StyleSheet.create({
   body: {
     padding: 24,
@@ -191,138 +258,154 @@ const s = StyleSheet.create({
   },
 });
 
-const leftColLabelWidth = '30%';
-const rightColLabelWidth = '40%';
+const Quixote = ({ data = {} }) => {
+  const leftColLabelWidth = '30%';
+  const rightColLabelWidth = '40%';
+  const dataSource = [
+    {
+      sNo: '1',
+      particulars: 'Mike',
+      amount: 32,
+    },
+    {
+      sNo: '2',
+      particulars: 'John',
+      amount: 42,
+    },
+    {
+      sNo: '',
+      particulars: 'Total',
+      amount: 74,
+    },
+  ];
 
-const Quixote = () => (
-  <Document>
-    <Page style={s.body}>
-      <View style={s.box}>
-        {/*<View style={s.header}>*/}
-        {/*  <View style={s.contentBox}>*/}
-        {/*    <View style={s.lines}>*/}
-        {/*      /!*<FontAwesomeIcon icon={faPhoneAlt} className={s.icon} />*!/*/}
-        {/*      <Caption>+91 98656 65656 | +91 98656 65656</Caption>*/}
-        {/*    </View>*/}
-        {/*    /!*<View style={s.lines}>*!/*/}
-        {/*    /!*  /!*<FontAwesomeIcon icon={faMapMarkedAlt} className={s.icon} />*!/*!/*/}
-        {/*    /!*  <Caption style={{ textAlign: 'center', width: '70%' }}>*!/*/}
-        {/*    /!*    Gurukulam St, near Marikavalasa Road, Paradesipalem, Madhurawada, Visakhapatnam,*!/*/}
-        {/*    /!*    A.P. 530041*!/*/}
-        {/*    /!*  </Caption>*!/*/}
-        {/*    /!*</View>*!/*/}
-        {/*    /!*<View style={s.lines}>*!/*/}
-        {/*    /!*  /!*<FontAwesomeIcon icon={faEnvelope} className={s.icon} />*!/*!/*/}
-        {/*    /!*  <Caption>accounts@intellischool.in</Caption>*!/*/}
-        {/*    /!*</View>*!/*/}
-        {/*  </View>*/}
-        {/*</View>*/}
-        <Headline style={s.heading}>Fee Receipt</Headline>
-        <View style={s.details}>
-          <DetailsColumns
-            firstCol={
-              <LabelAndValue
-                labelWidth={leftColLabelWidth}
-                label={'Transaction ID'}
-                value={'NWTN20232223'}
-              />
-            }
-            secondCol={
-              <LabelAndValue
-                labelWidth={rightColLabelWidth}
-                label={'Transaction Time'}
-                value={'09 Jan 2023 04:55 PM'}
-              />
-            }
-          />
-          <DetailsColumns
-            firstCol={
-              <LabelAndValue
-                labelWidth={leftColLabelWidth}
-                label={'Receipt Number'}
-                value={'IDNT898565'}
-              />
-            }
-            secondCol={
-              <LabelAndValue
-                labelWidth={rightColLabelWidth}
-                label={'Payment Mode'}
-                value={'Cash'}
-              />
-            }
-          />
-          <DetailsColumns
-            firstCol={
-              <LabelAndValue
-                labelWidth={leftColLabelWidth}
-                label={'Student Name'}
-                value={
-                  'Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav' +
-                  ' Mishra Aarav Mishra'
-                }
-              />
-            }
-            secondCol={
-              <LabelAndValue labelWidth={rightColLabelWidth} label={'Grade'} value={'PPI A'} />
-            }
-          />
-          <DetailsColumns
-            firstCol={
-              <LabelAndValue
-                labelWidth={leftColLabelWidth}
-                label={'Enrollment Number'}
-                value={'GVS9686564'}
-              />
-            }
-            secondCol={
-              <LabelAndValue labelWidth={rightColLabelWidth} label={'URN'} value={'123141212'} />
-            }
-          />
-        </View>
-        {/*<View>*/}
-        {/*  <Table*/}
-        {/*    pagination={false}*/}
-        {/*    bordered*/}
-        {/*    size={'small'}*/}
-        {/*    columns={columns}*/}
-        {/*    dataSource={dataSource}*/}
-        {/*    summary={() => {*/}
-        {/*      return (*/}
-        {/*        <>*/}
-        {/*          <Table.Summary.Row>*/}
-        {/*            <Table.Summary.Cell index={0} />*/}
-        {/*            <Table.Summary.Cell index={1}>*/}
-        {/*              <Body bold={true}>Total</Body>*/}
-        {/*            </Table.Summary.Cell>*/}
-        {/*            <Table.Summary.Cell index={2}>*/}
-        {/*              <Body block={true} bold={true} style={{ textAlign: 'right' }}>*/}
-        {/*                10000*/}
-        {/*              </Body>*/}
-        {/*            </Table.Summary.Cell>*/}
-        {/*          </Table.Summary.Row>*/}
-        {/*        </>*/}
-        {/*      );*/}
-        {/*    }}*/}
-        {/*  />*/}
-        {/*</View>*/}
-        <View style={s.note}>
-          <View style={{ marginRight: 5 }}>
-            <Body bold={true}>Note:</Body>
+  const columns = [
+    {
+      title: 'S.No',
+      dataIndex: 'sNo',
+      key: 'sNo',
+      width: 50,
+    },
+    {
+      title: 'Particulars',
+      dataIndex: 'particulars',
+      key: 'particulars',
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      textAlign: 'right',
+    },
+  ];
+  return (
+    <Document>
+      <Page style={s.body}>
+        <View style={s.box}>
+          {/*<View style={s.header}>*/}
+          {/*  <View style={s.contentBox}>*/}
+          {/*    <View style={s.lines}>*/}
+          {/*      /!*<FontAwesomeIcon icon={faPhoneAlt} className={s.icon} />*!/*/}
+          {/*      <Caption>+91 98656 65656 | +91 98656 65656</Caption>*/}
+          {/*    </View>*/}
+          {/*    <View style={cx(s.lines, { width: '70%' })}>*/}
+          {/*      /!*<FontAwesomeIcon icon={faMapMarkedAlt} className={s.icon} />*!/*/}
+          {/*      <Caption style={{ textAlign: 'center' }}>*/}
+          {/*        Gurukulam St, near Marikavalasa Road, Paradesipalem, Madhurawada, Visakhapatnam,*/}
+          {/*        A.P. 530041*/}
+          {/*      </Caption>*/}
+          {/*    </View>*/}
+          {/*    <View style={s.lines}>*/}
+          {/*      /!*<FontAwesomeIcon icon={faEnvelope} className={s.icon} />*!/*/}
+          {/*      <Caption>accounts@intellischool.in</Caption>*/}
+          {/*    </View>*/}
+          {/*  </View>*/}
+          {/*</View>*/}
+          <Headline style={s.heading}>Fee Receipt</Headline>
+          <View style={s.details}>
+            <DetailsColumns
+              firstCol={
+                <LabelAndValue
+                  labelWidth={leftColLabelWidth}
+                  label={'Transaction ID'}
+                  value={'NWTN20232223'}
+                />
+              }
+              secondCol={
+                <LabelAndValue
+                  labelWidth={rightColLabelWidth}
+                  label={'Transaction Time'}
+                  value={'09 Jan 2023 04:55 PM'}
+                />
+              }
+            />
+            <DetailsColumns
+              firstCol={
+                <LabelAndValue
+                  labelWidth={leftColLabelWidth}
+                  label={'Receipt Number'}
+                  value={'IDNT898565'}
+                />
+              }
+              secondCol={
+                <LabelAndValue
+                  labelWidth={rightColLabelWidth}
+                  label={'Payment Mode'}
+                  value={'Cash'}
+                />
+              }
+            />
+            <DetailsColumns
+              firstCol={
+                <LabelAndValue
+                  labelWidth={leftColLabelWidth}
+                  label={'Student Name'}
+                  value={
+                    'Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav' +
+                    ' Mishra Aarav Mishra'
+                  }
+                />
+              }
+              secondCol={
+                <LabelAndValue labelWidth={rightColLabelWidth} label={'Grade'} value={'PPI A'} />
+              }
+            />
+            <DetailsColumns
+              firstCol={
+                <LabelAndValue
+                  labelWidth={leftColLabelWidth}
+                  label={'Enrollment Number'}
+                  value={'GVS9686564'}
+                />
+              }
+              secondCol={
+                <LabelAndValue labelWidth={rightColLabelWidth} label={'URN'} value={'123141212'} />
+              }
+            />
           </View>
-          <View style={{ flex: 1 }}>
-            <Body>
-              Parents are requested to preserve this receipt for future clarifications in respect
-              of fee paid by you. Fee once paid will not be refunded or transferred. Cheques
-              subject to relaxations.
-            </Body>
+          <View>
+            <Table columns={columns} dataSource={dataSource} hasFooter={true} />
+          </View>
+          <View style={s.note}>
+            <View style={{ marginRight: 5 }}>
+              <Body bold={true}>Note:</Body>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Body>
+                Parents are requested to preserve this receipt for future clarifications in respect
+                of fee paid by you. Fee once paid will not be refunded or transferred. Cheques
+                subject to relaxations.
+              </Body>
+            </View>
+          </View>
+          <View style={{ textAlign: 'center', marginTop: 8 }}>
+            <Body>This is a computer generated receipt no signature is required</Body>
           </View>
         </View>
-        <View style={{ textAlign: 'center', marginTop: 8 }}>
-          <Body>This is a computer generated receipt no signature is required</Body>
-        </View>
-      </View>
-    </Page>
-  </Document>
-);
+      </Page>
+    </Document>
+  );
+};
+
 
 module.exports = { Quixote };
