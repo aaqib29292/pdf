@@ -22,7 +22,7 @@ const headline = StyleSheet.create({
     display: 'block',
   },
   bold: {
-    fontWeight: 700,
+    fontFamily: 'Times-Bold',
   },
 });
 
@@ -49,7 +49,7 @@ const body = StyleSheet.create({
     display: 'block',
   },
   bold: {
-    fontWeight: 700,
+    fontFamily: 'Times-Bold',
   },
 });
 
@@ -73,7 +73,7 @@ const caption = StyleSheet.create({
     display: 'block',
   },
   bold: {
-    fontWeight: 700,
+    fontFamily: 'Times-Bold',
   },
 });
 
@@ -160,7 +160,7 @@ const table = StyleSheet.create({
   },
   tableFooter: {
     backgroundColor: '#F2F4F8',
-    fontWeight: 700,
+    fontFamily: 'Times-Bold',
   },
   tableCol: {
     borderStyle: 'solid',
@@ -230,13 +230,12 @@ const s = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'red',
   },
   lines: {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: 4.5,
   },
   heading: {
     textAlign: 'center',
@@ -302,25 +301,25 @@ const Quixote = ({ data = {} }) => {
     <Document>
       <Page style={s.body}>
         <View style={s.box}>
-          {/*<View style={s.header}>*/}
-          {/*  <View style={s.contentBox}>*/}
-          {/*    <View style={s.lines}>*/}
-          {/*      /!*<FontAwesomeIcon icon={faPhoneAlt} className={s.icon} />*!/*/}
-          {/*      <Caption>+91 98656 65656 | +91 98656 65656</Caption>*/}
-          {/*    </View>*/}
-          {/*    <View style={cx(s.lines, { width: '70%' })}>*/}
-          {/*      /!*<FontAwesomeIcon icon={faMapMarkedAlt} className={s.icon} />*!/*/}
-          {/*      <Caption style={{ textAlign: 'center' }}>*/}
-          {/*        Gurukulam St, near Marikavalasa Road, Paradesipalem, Madhurawada, Visakhapatnam,*/}
-          {/*        A.P. 530041*/}
-          {/*      </Caption>*/}
-          {/*    </View>*/}
-          {/*    <View style={s.lines}>*/}
-          {/*      /!*<FontAwesomeIcon icon={faEnvelope} className={s.icon} />*!/*/}
-          {/*      <Caption>accounts@intellischool.in</Caption>*/}
-          {/*    </View>*/}
-          {/*  </View>*/}
-          {/*</View>*/}
+          <View style={s.header}>
+            <View style={s.contentBox}>
+              <View style={s.lines}>
+                {/*<FontAwesomeIcon icon={faPhoneAlt} className={s.icon} />*/}
+                <Caption>+91 98656 65656 | +91 98656 65656</Caption>
+              </View>
+              <View style={cx(s.lines, { width: '80%' })}>
+                {/*<FontAwesomeIcon icon={faMapMarkedAlt} className={s.icon} />*/}
+                <Caption style={{ textAlign: 'center' }}>
+                  Gurukulam St, near Marikavalasa Road, Paradesipalem, Madhurawada, Visakhapatnam,
+                  A.P. 530041
+                </Caption>
+              </View>
+              <View style={s.lines}>
+                {/*<FontAwesomeIcon icon={faEnvelope} className={s.icon} />*/}
+                <Caption>accounts@intellischool.in</Caption>
+              </View>
+            </View>
+          </View>
           <Headline style={s.heading}>Fee Receipt</Headline>
           <View style={s.details}>
             <DetailsColumns
