@@ -10,17 +10,6 @@ const cx = (...args) => {
   }, {})
 }
 
-const Headline = ({ bold = true, block = true, style = {}, children, ...props }) => {
-  return (
-    <Text
-      style={cx(headline.common, bold && headline.bold, block && headline.block, style)}
-      {...props}
-    >
-      {children}
-    </Text>
-  );
-};
-
 const headline = StyleSheet.create({
   common: {
     color: '#101112',
@@ -37,6 +26,68 @@ const headline = StyleSheet.create({
   },
 });
 
+const Headline = ({ bold = true, block = true, style = {}, children, ...props }) => {
+  return (
+    <Text
+      style={cx(headline.common, bold && headline.bold, block && headline.block, style)}
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+};
+
+const body = StyleSheet.create({
+  common: {
+    color: '#101112',
+    fontSize: 10,
+    lineHeight: 1.1,
+    fontWeight: 400,
+    display: 'inline-block',
+  },
+  block: {
+    display: 'block',
+  },
+  bold: {
+    fontWeight: 700,
+  },
+});
+
+const Body = ({ bold = false, block = false, style = {}, children, ...props }) => {
+  return (
+    <Text style={cx(body.common, bold && body.bold, block && body.block, style)} {...props}>
+      {children}
+    </Text>
+  );
+};
+
+const caption = StyleSheet.create({
+  common: {
+    color: '#101112',
+    fontSize: 9,
+    lineHeight: 1.11,
+    fontWeight: 400,
+    display: 'inline-block',
+  },
+  block: {
+    display: 'block',
+  },
+  bold: {
+    fontWeight: 700,
+  },
+});
+
+const Caption = ({ bold = false, block = false, style = {}, children, ...props }) => {
+  return (
+    <Text
+      style={cx(caption.common, bold && caption.bold, block && caption.block, style)}
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+};
+
 const Quixote = () => (
   <Document>
     <Page style={styles.body}>
@@ -44,6 +95,8 @@ const Quixote = () => (
         ~ Created with react-pdf ~
       </Text>
       <Headline>dasdasdsadasd asdasd asd asd</Headline>
+      <Body>dasdasdsadasd asdasd asd asd</Body>
+      <Caption>dasdasdsadasd asdasd asd asd</Caption>
       <Text style={styles.title}>Don Quijote de la Mancha</Text>
       <Text style={styles.author}>Miguel de Cervantes</Text>
       <Text style={styles.subtitle}>
