@@ -1,6 +1,41 @@
 const React = require("react");
 const { Document, Page, StyleSheet, Text } = require("@react-pdf/renderer");
 
+const cx = (...args) => {
+  return args.reduce((acc,argument ) => {
+    if(typeof argument === 'object'){
+      return {...acc, ...argument}
+    }
+    return acc
+  }, {})
+}
+
+const Headline = ({ bold = true, block = true, style = {}, children, ...props }) => {
+  return (
+    <Text
+      style={cx(headline.common, bold && headline.bold, block && headline.block, style)}
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+};
+
+const headline = StyleSheet.create({
+  common: {
+    color: '#101112',
+    fontSize: '12px',
+    lineHeight: 1.16,
+    fontWeight: 400,
+    display: 'inline-block',
+  },
+  block: {
+    display: 'block',
+  },
+  bold: {
+    fontWeight: 700,
+  },
+});
 
 const Quixote = () => (
   <Document>
@@ -8,6 +43,7 @@ const Quixote = () => (
       <Text style={styles.header} fixed>
         ~ Created with react-pdf ~
       </Text>
+      <Headline>dasdasdsadasd asdasd asd asd</Headline>
       <Text style={styles.title}>Don Quijote de la Mancha</Text>
       <Text style={styles.author}>Miguel de Cervantes</Text>
       <Text style={styles.subtitle}>
