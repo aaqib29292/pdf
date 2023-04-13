@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 8000;
 
 const app = express();
 
-// app.use(express.static(path.resolve(__dirname, "/images")));
-app.use('/images', express.static('images'));
+app.use('/images', express.static(path.resolve(__dirname, "images")));
+// app.use('/images', express.static('images'));
 // Handling JSON datas
 app.use(cors());
 app.use(express.json()); // to support JSON-encoded bodies
