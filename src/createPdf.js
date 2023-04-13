@@ -1,13 +1,13 @@
 const React = require("react");
 
 const { renderToStream} = require("@react-pdf/renderer");
-const { Quixote } = require("./FeeReceipt");
+const { FeeReceipt } = require("./FeeReceipt");
 
-async function createPdf(res) {
+async function createPdf(req, res) {
   try {
     // await renderToFile(<MyDocument />, `${__dirname}/my-doc.pdf`);
     // return "pdf created in lib directory";
-    const result = await renderToStream(React.createElement(Quixote, null));
+    const result = await renderToStream(<FeeReceipt data={req.body} />);
     // Setting up the response headers
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=export.pdf`);

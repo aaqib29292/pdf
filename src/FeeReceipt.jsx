@@ -1,4 +1,5 @@
 const React = require("react");
+const dayjs = require('dayjs');
 const { Document, Page, StyleSheet, Text, View, Svg, Path, Image } = require("@react-pdf/renderer");
 
 const cx = (...args) => {
@@ -9,6 +10,22 @@ const cx = (...args) => {
     return acc
   }, {})
 }
+
+const toRupee = (amount = 0, maximumFractionDigits = 0) => {
+  let number = amount || 0;
+
+  if (typeof amount === 'string') {
+    number = parseFloat(amount);
+  }
+  if (Number.isNaN(number)) {
+    throw new Error(`${amount} is not a number`);
+  }
+  return number.toLocaleString('en-IN', {
+    maximumFractionDigits,
+    // style: 'currency',
+    // currency: 'INR',
+  });
+};
 
 const headline = StyleSheet.create({
   common: {
@@ -307,33 +324,26 @@ const s = StyleSheet.create({
   },
 });
 
-const Quixote = ({ data = {} }) => {
+const FeeReceipt = ({ data = {} }) => {
+  console.log(data)
   const leftColLabelWidth = '30%';
   const rightColLabelWidth = '40%';
   const dataSource = [
+    ...data?.paidTowards,
     {
-      sNo: '1',
-      particulars: 'Mike',
-      amount: 32,
-    },
-    {
-      sNo: '2',
-      particulars: 'John',
-      amount: 42,
-    },
-    {
-      sNo: '',
+      index: '',
       particulars: 'Total',
-      amount: 74,
+      amount: data?.paidTowards.reduce((acc = 0, paidToward) => acc + (paidToward.amount || 0), 0),
     },
   ];
 
   const columns = [
     {
       title: 'S.No',
-      dataIndex: 'sNo',
-      key: 'sNo',
+      dataIndex: 'index',
+      key: 'index',
       width: 50,
+      textAlign: 'center',
     },
     {
       title: 'Particulars',
@@ -341,12 +351,14 @@ const Quixote = ({ data = {} }) => {
       key: 'particulars',
     },
     {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
+      title: 'Amount in INR',
+      dataIndex: 'amountInRupee',
+      key: 'amountInRupee',
       textAlign: 'right',
     },
   ];
+
+  const { receiptDetails = {} } = data;
   return (
     <Document>
       <Page style={s.body}>
@@ -354,33 +366,52 @@ const Quixote = ({ data = {} }) => {
           <View style={s.header}>
             {/*<Image style={s.logo} src={intelli_logo_v} />*/}
             <View style={s.contentBox}>
-              <View style={s.lines}>
-                <Text style={s.schoolName}>The Intelli School</Text>
-              </View>
-              <View style={s.lines}>
-                <Body>(Chitra Educational Trust)</Body>
-              </View>
-              <View style={s.lines}>
-                <View style={s.icon}>
-                  <PhoneIcon />
-                </View>
-                <Caption>+91 98656 65656 | +91 98656 65656</Caption>
-              </View>
-              <View style={cx(s.lines, { alignItems: 'flex-start' }, { width: '80%' })}>
-                <View style={cx(s.icon, { marginTop: 1 })}>
-                  <LocationIcon />
-                </View>
-                <Caption style={{ textAlign: 'center' }}>
-                  Gurukulam St, near Marikavalasa Road, Paradesipalem, Madhurawada, Visakhapatnam,
-                  A.P. 530041
-                </Caption>
-              </View>
-              <View style={s.lines}>
-                <View style={s.icon}>
-                  <EmailIcon />
-                </View>
-                <Caption>accounts@intellischool.in</Caption>
-              </View>
+              {data?.captions.map((caption) => {
+                if (caption.type === 'schoolName') {
+                  return (
+                    <View style={s.lines}>
+                      <Text style={s.schoolName}>{caption.name}</Text>
+                    </View>
+                  );
+                }
+                if (caption.type === 'subTitle') {
+                  return (
+                    <View style={s.lines}>
+                      <Body>{caption.name}</Body>
+                    </View>
+                  );
+                }
+                if (caption.type === 'phoneNumber') {
+                  return (
+                    <View style={s.lines}>
+                      <View style={s.icon}>
+                        <PhoneIcon />
+                      </View>
+                      <Caption>{caption.name}</Caption>
+                    </View>
+                  );
+                }
+                if (caption.type === 'address') {
+                  return (
+                    <View style={cx(s.lines, { alignItems: 'flex-start' }, { width: '80%' })}>
+                      <View style={cx(s.icon, { marginTop: 1 })}>
+                        <LocationIcon />
+                      </View>
+                      <Caption style={{ textAlign: 'center' }}>{caption.name}</Caption>
+                    </View>
+                  );
+                }
+                if (caption.type === 'email') {
+                  return (
+                    <View style={s.lines}>
+                      <View style={s.icon}>
+                        <EmailIcon />
+                      </View>
+                      <Caption>{caption.name}</Caption>
+                    </View>
+                  );
+                }
+              })}
             </View>
           </View>
           <Headline style={s.heading}>Fee Receipt</Headline>
@@ -390,14 +421,14 @@ const Quixote = ({ data = {} }) => {
                 <LabelAndValue
                   labelWidth={leftColLabelWidth}
                   label={'Transaction ID'}
-                  value={'NWTN20232223'}
+                  value={receiptDetails?.transactionId}
                 />
               }
               secondCol={
                 <LabelAndValue
                   labelWidth={rightColLabelWidth}
                   label={'Transaction Time'}
-                  value={'09 Jan 2023 04:55 PM'}
+                  value={dayjs(receiptDetails?.transactionTime || '').format('DD MMM YYYY hh:mm A')}
                 />
               }
             />
@@ -406,14 +437,14 @@ const Quixote = ({ data = {} }) => {
                 <LabelAndValue
                   labelWidth={leftColLabelWidth}
                   label={'Receipt Number'}
-                  value={'IDNT898565'}
+                  value={receiptDetails?.receiptNumber}
                 />
               }
               secondCol={
                 <LabelAndValue
                   labelWidth={rightColLabelWidth}
-                  label={'Payment Mode'}
-                  value={'Cash'}
+                  label={'Student Name'}
+                  value={receiptDetails?.name}
                 />
               }
             />
@@ -421,32 +452,77 @@ const Quixote = ({ data = {} }) => {
               firstCol={
                 <LabelAndValue
                   labelWidth={leftColLabelWidth}
-                  label={'Student Name'}
+                  label={data?.receiptFor === 'admission' ? 'URN' : 'Enrollment Number'}
                   value={
-                    'Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav Mishra Aarav' +
-                    ' Mishra Aarav Mishra'
+                    data?.receiptFor === 'admission'
+                      ? receiptDetails?.urn
+                      : receiptDetails?.enrollmentNumber
                   }
                 />
               }
               secondCol={
-                <LabelAndValue labelWidth={rightColLabelWidth} label={'Grade'} value={'PPI A'} />
+                <LabelAndValue
+                  labelWidth={rightColLabelWidth}
+                  label={'Father Name'}
+                  value={receiptDetails?.fatherName}
+                />
               }
             />
             <DetailsColumns
               firstCol={
                 <LabelAndValue
                   labelWidth={leftColLabelWidth}
-                  label={'Enrollment Number'}
-                  value={'GVS9686564'}
+                  label={'Grade and Year'}
+                  value={receiptDetails?.gradeAndAy}
                 />
               }
               secondCol={
-                <LabelAndValue labelWidth={rightColLabelWidth} label={'URN'} value={'123141212'} />
+                <LabelAndValue
+                  labelWidth={rightColLabelWidth}
+                  label={'Mother Name'}
+                  value={receiptDetails?.motherName}
+                />
+              }
+            />
+            <DetailsColumns
+              firstCol={
+                <LabelAndValue
+                  labelWidth={leftColLabelWidth}
+                  label={'Payment Method'}
+                  value={
+                    receiptDetails.paymentMode === 'Cheque'
+                      ? 'Cheque' +
+                      (receiptDetails?.chequeNumber ? `-${receiptDetails?.chequeNumber}` : '')
+                      : receiptDetails?.paymentMode
+                  }
+                />
+              }
+              secondCol={
+                receiptDetails.paymentMode === 'cheque' && (
+                  <LabelAndValue
+                    labelWidth={rightColLabelWidth}
+                    label={'Bank Name & Date'}
+                    value={
+                      receiptDetails?.bankName +
+                      (receiptDetails.paymentMode === 'Cheque' &&
+                        ` - ${dayjs(receiptDetails?.chequeDate || '').format('DD MMM YY')}`)
+                    }
+                  />
+                )
               }
             />
           </View>
           <View>
-            <Table columns={columns} dataSource={dataSource} hasFooter={true} />
+            <Table
+              columns={columns}
+              dataSource={dataSource.map((item) => {
+                const temp = { ...item };
+                temp.amountInRupee = toRupee(item.amount);
+
+                return temp;
+              })}
+              hasFooter={true}
+            />
           </View>
           <View style={s.note}>
             <View style={{ marginRight: 5 }}>
@@ -469,5 +545,4 @@ const Quixote = ({ data = {} }) => {
   );
 };
 
-
-module.exports = { Quixote };
+module.exports = { FeeReceipt };

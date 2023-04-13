@@ -19,6 +19,7 @@
   "dependencies": {
     "@react-pdf/renderer": "^2.0.19",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.7",
     "express": "^4.17.1",
     "path": "^0.12.7",
     "react": "^17.0.2"
