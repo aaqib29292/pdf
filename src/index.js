@@ -1,14 +1,15 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+
 const { createPdf } = require("./createPdf");
 
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
-app.use(express.static(path.resolve(__dirname, "client")));
-
+// app.use(express.static(path.resolve(__dirname, "/images")));
+app.use('/images', express.static('images'));
 // Handling JSON datas
 app.use(cors());
 app.use(express.json()); // to support JSON-encoded bodies
@@ -17,7 +18,7 @@ app.use(express.static(__dirname));
 
 const mockReq = {
   receiptFor: 'admission',
-  schoolId: 16,
+  schoolId: 1,
   captions: [
     {
       name: 'Newton Classroom',

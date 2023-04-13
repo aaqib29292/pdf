@@ -137,7 +137,6 @@ const labelAndValueStyles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   value: {
-    marginTop: 1,
     flex: 1,
   },
 });
@@ -275,12 +274,15 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 8,
     position: 'relative',
+    minHeight: 64,
   },
-  logo: {
-    height: 48,
+  logoWrapper: {
     position: 'absolute',
+    height: '100%',
     top: 0,
     left: 0,
+    justifyContent: 'center',
+    minHeight: 64,
   },
   contentBox: {
     width: '50%',
@@ -324,8 +326,29 @@ const s = StyleSheet.create({
   },
 });
 
+const getLogoImage = (schoolId) => {
+  if (schoolId === 11) {
+    return "./images/gvs_logo_v.png";
+  }
+  if (schoolId === 12) {
+    return "./images/intelli_logo_v.png";
+  }
+  if (schoolId === 15) {
+    return "./images/accord_logo_v.png";
+  }
+  if (schoolId === 16) {
+    return "./images/Logo_Finschool_A_V.png";
+  }
+  if (schoolId === 17) {
+    return "./images/Logo_Finschool_B_V.png";
+  }
+  if (schoolId === 1) {
+    return "./images/Logo_Dev_School_V.png";
+  }
+  return "";
+};
+
 const FeeReceipt = ({ data = {} }) => {
-  console.log(data)
   const leftColLabelWidth = '30%';
   const rightColLabelWidth = '40%';
   const dataSource = [
@@ -351,7 +374,7 @@ const FeeReceipt = ({ data = {} }) => {
       key: 'particulars',
     },
     {
-      title: 'Amount in INR',
+      title: 'Amount',
       dataIndex: 'amountInRupee',
       key: 'amountInRupee',
       textAlign: 'right',
@@ -364,26 +387,28 @@ const FeeReceipt = ({ data = {} }) => {
       <Page style={s.body}>
         <View style={s.box}>
           <View style={s.header}>
-            {/*<Image style={s.logo} src={intelli_logo_v} />*/}
+            <View style={s.logoWrapper}>
+              <Image style={{height: 64}} src={getLogoImage(data.schoolId)} />
+            </View>
             <View style={s.contentBox}>
               {data?.captions.map((caption) => {
                 if (caption.type === 'schoolName') {
                   return (
-                    <View style={s.lines}>
+                    <View key={caption.index} style={s.lines}>
                       <Text style={s.schoolName}>{caption.name}</Text>
                     </View>
                   );
                 }
                 if (caption.type === 'subTitle') {
                   return (
-                    <View style={s.lines}>
+                    <View key={caption.index} style={s.lines}>
                       <Body>{caption.name}</Body>
                     </View>
                   );
                 }
                 if (caption.type === 'phoneNumber') {
                   return (
-                    <View style={s.lines}>
+                    <View key={caption.index} style={s.lines}>
                       <View style={s.icon}>
                         <PhoneIcon />
                       </View>
@@ -393,7 +418,7 @@ const FeeReceipt = ({ data = {} }) => {
                 }
                 if (caption.type === 'address') {
                   return (
-                    <View style={cx(s.lines, { alignItems: 'flex-start' }, { width: '80%' })}>
+                    <View key={caption.index} style={cx(s.lines, { alignItems: 'flex-start' }, { width: '80%' })}>
                       <View style={cx(s.icon, { marginTop: 1 })}>
                         <LocationIcon />
                       </View>
@@ -403,7 +428,7 @@ const FeeReceipt = ({ data = {} }) => {
                 }
                 if (caption.type === 'email') {
                   return (
-                    <View style={s.lines}>
+                    <View key={caption.index} style={s.lines}>
                       <View style={s.icon}>
                         <EmailIcon />
                       </View>
@@ -498,7 +523,7 @@ const FeeReceipt = ({ data = {} }) => {
                 />
               }
               secondCol={
-                receiptDetails.paymentMode === 'cheque' && (
+                receiptDetails.paymentMode === 'Cheque' && (
                   <LabelAndValue
                     labelWidth={rightColLabelWidth}
                     label={'Bank Name & Date'}
@@ -517,8 +542,7 @@ const FeeReceipt = ({ data = {} }) => {
               columns={columns}
               dataSource={dataSource.map((item) => {
                 const temp = { ...item };
-                temp.amountInRupee = toRupee(item.amount);
-
+                temp.amountInRupee = 'INR ' + toRupee(item.amount);
                 return temp;
               })}
               hasFooter={true}
