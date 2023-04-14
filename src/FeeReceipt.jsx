@@ -186,7 +186,7 @@ const table = StyleSheet.create({
     borderColor: '#868992',
   },
   tableCell: {
-    padding: '4.5px 8px',
+    padding: '4px 8px',
   },
 });
 
@@ -265,14 +265,14 @@ const s = StyleSheet.create({
   },
   box: {
     border: '1px solid #868992',
-    padding: 12,
+    padding: '4px 12px',
   },
   header: {
     borderBottom: '1px solid #e6e8eb',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingBottom: 8,
+    paddingBottom: 4,
     position: 'relative',
     minHeight: 64,
   },
@@ -295,21 +295,22 @@ const s = StyleSheet.create({
     fontSize: '16px',
     lineHeight: 1.125,
     fontFamily: 'Times-Bold',
+    marginBottom: 2,
   },
   lines: {
     display: 'inline-flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4.5,
+    marginBottom: 0,
   },
   icon: {
     marginRight: 4,
   },
   heading: {
     textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 4,
+    marginBottom: 4,
     textTransform: 'uppercase',
   },
   details: {
@@ -317,9 +318,9 @@ const s = StyleSheet.create({
   },
 
   note: {
-    marginTop: 8,
+    marginTop: 4,
     border: '1px solid #868992',
-    padding: 6,
+    padding: 4,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -445,31 +446,15 @@ const FeeReceipt = ({ data = {} }) => {
               firstCol={
                 <LabelAndValue
                   labelWidth={leftColLabelWidth}
-                  label={'Transaction ID'}
-                  value={receiptDetails?.transactionId}
-                />
-              }
-              secondCol={
-                <LabelAndValue
-                  labelWidth={rightColLabelWidth}
-                  label={'Transaction Time'}
-                  value={dayjs(receiptDetails?.transactionTime || '').format('DD MMM YYYY hh:mm A')}
-                />
-              }
-            />
-            <DetailsColumns
-              firstCol={
-                <LabelAndValue
-                  labelWidth={leftColLabelWidth}
-                  label={'Receipt Number'}
-                  value={receiptDetails?.receiptNumber}
-                />
-              }
-              secondCol={
-                <LabelAndValue
-                  labelWidth={rightColLabelWidth}
                   label={'Student Name'}
                   value={receiptDetails?.name}
+                />
+              }
+              secondCol={
+                <LabelAndValue
+                  labelWidth={rightColLabelWidth}
+                  label={'Receipt Number'}
+                  value={receiptDetails?.receiptNumber}
                 />
               }
             />
@@ -488,8 +473,8 @@ const FeeReceipt = ({ data = {} }) => {
               secondCol={
                 <LabelAndValue
                   labelWidth={rightColLabelWidth}
-                  label={'Father Name'}
-                  value={receiptDetails?.fatherName}
+                  label={'Transaction Time'}
+                  value={dayjs(receiptDetails?.transactionTime || '').format('DD MMM YYYY hh:mm A')}
                 />
               }
             />
@@ -504,8 +489,8 @@ const FeeReceipt = ({ data = {} }) => {
               secondCol={
                 <LabelAndValue
                   labelWidth={rightColLabelWidth}
-                  label={'Mother Name'}
-                  value={receiptDetails?.motherName}
+                  label={'Transaction ID'}
+                  value={receiptDetails?.transactionId}
                 />
               }
             />
@@ -513,6 +498,13 @@ const FeeReceipt = ({ data = {} }) => {
               firstCol={
                 <LabelAndValue
                   labelWidth={leftColLabelWidth}
+                  label={'Father Name'}
+                  value={receiptDetails?.fatherName}
+                />
+              }
+              secondCol={
+                <LabelAndValue
+                  labelWidth={rightColLabelWidth}
                   label={'Payment Method'}
                   value={
                     receiptDetails.paymentMode === 'Cheque'
@@ -522,8 +514,17 @@ const FeeReceipt = ({ data = {} }) => {
                   }
                 />
               }
+            />
+            <DetailsColumns
+              firstCol={
+                <LabelAndValue
+                  labelWidth={leftColLabelWidth}
+                  label={'Mother Name'}
+                  value={receiptDetails?.motherName}
+                />
+              }
               secondCol={
-                receiptDetails.paymentMode === 'Cheque' && (
+                receiptDetails.paymentMode === 'cheque' && (
                   <LabelAndValue
                     labelWidth={rightColLabelWidth}
                     label={'Bank Name & Date'}
@@ -560,7 +561,7 @@ const FeeReceipt = ({ data = {} }) => {
               </Body>
             </View>
           </View>
-          <View style={{ textAlign: 'center', marginTop: 8 }}>
+          <View style={{ textAlign: 'center', marginTop: 4 }}>
             <Body>This is a computer generated receipt no signature is required</Body>
           </View>
         </View>
